@@ -1,0 +1,73 @@
+/* html{
+    background-color: black;
+} */
+.body{
+    margin:0px;
+    padding: 0px;
+    height: 100vh;
+    background-color: #0D1C0D;
+}
+
+.message-box{
+    background-color: #C1DBA9;
+    display: flex;
+    position: relative;
+    width: 350px;
+    height: 35px;
+    left: 36%;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    font-size: 28px;
+    border-radius: 5px;
+}
+
+.table{
+    background: #4C8844;
+    background: -moz-linear-gradient(top, #4C8844 0%, #77B143 50%, #4C8844 100%);
+    background: -webkit-linear-gradient(top, #4C8844 0%, #77B143 50%, #4C8844 100%);
+    background: linear-gradient(to bottom, #4C8844 0%, #77B143 50%, #4C8844 100%);
+    height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.player{
+    /* background-color: rgb(149, 149, 149); */
+    width: 95vw;
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.hand{
+    background-color: #B5D897;
+    height: 225px;
+    border-radius: 15px;
+    overflow: scroll;
+    display: flex;
+    -webkit-box-shadow: 6px 6px 12px 0px rgba(0,0,0,0.65); 
+    box-shadow: 6px 6px 12px 0px rgba(0,0,0,0.65);
+}
+
+.buttons{
+    margin-top: 10px;
+}
+
+.card1{
+    height: 225px;
+    width: auto;
+}
+
+#deal-button{
+    border-radius: 5px;
+}
+
+#hit-button{
+    border-radius: 5px;
+}
+
+#stand-button{
+    border-radius: 5px;
+}
