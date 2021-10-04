@@ -4,12 +4,22 @@
     padding: 0px;
     height: 100vh;
     background-color: #0D1C0D;
+    position: relative;
+}
+
+.betButton{
+    height: 35px;
+    width: fit-content 
+}
+
+.drop-menu{
+    height: 125px;
+    overflow: scroll;
 }
 
 .message-box{
     background-color: #C1DBA9;
     display: flex;
-    position: relative;
     width: fit-content;
     height: 35px;
     justify-content: center;
@@ -35,12 +45,14 @@
 .player{
     /* background-color: rgb(149, 149, 149); */
     width: 95vw;
-    margin-top: 50px;
     font-size: 20px;
 }
 
 .hand{
-    background-color: #B5D897;
+    background: #C1DBA9;
+    background: -moz-linear-gradient(45deg, #C1DBA9 0%, #A2C97E 50%, #C1DBA9 100%);
+    background: -webkit-linear-gradient(45deg, #C1DBA9 0%, #A2C97E 50%, #C1DBA9 100%);
+    background: linear-gradient(45deg, #C1DBA9 0%, #A2C97E 50%, #C1DBA9 100%);
     height: 28vh;
     border-radius: 15px;
     overflow: scroll;
@@ -58,14 +70,81 @@
     width: auto;
 }
 
+.budget{
+    padding-top:0px;
+    padding-bottom: 0px;
+    font-size: 30px;
+}
+
 #deal-button{
     border-radius: 5px;
+    font-size: 22px;
 }
 
 #hit-button{
     border-radius: 5px;
+    font-size: 22px;
 }
 
 #stand-button{
     border-radius: 5px;
+    font-size: 22px;
+}
+
+#play-again-button{
+    border-radius: 25px;
+    font-size: 22px;
+}
+
+@media (max-width: 450px) {
+    .betButton{
+        height: 35px;
+        font-size: 14px;
+    }
+
+    .budget{
+        font-size: 16px;
+    }
+
+    .message-box{
+        height: 30px;
+        font-size: 12px;
+        padding-left: 5px;
+        padding-right: 5px;
+        margin: 0px;
+    }
+
+    .hand{
+        height: 24vh;
+    }
+
+    .card1{
+        height: 24vh;
+    }
+
+    #dealer{
+        font-size: 16px;
+        margin-bottom: 5px;
+        margin-top: 20px;
+    }
+
+    #player{
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    #deal-button{
+        font-size: 15px;
+    }
+    #hit-button{
+        font-size: 15px;
+    }
+    
+    #stand-button{
+        font-size: 15px;
+    }
+    
+    #play-again-button{
+        font-size: 15px;
+    }
 }

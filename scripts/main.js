@@ -1,36 +1,51 @@
 
 let deck = []
-let deck2 = []
+let numberOfDecks = 3
+let edgeDeck = [] // deck to test edge cases
 let playerHand = []
-var dealerHand = []
+let dealerHand = []
 let cardNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-let cardNumbers2 = [1, 11, 12, 13]
+let cardNumbers2 = [1, 11, 12, 13] // only aces and face cards for edge cases
 let suits = ["clubs", "diamonds", "hearts", "spades"]
+let playerPoints = 0
+let dealerPoints = 0
+let playerWins = 0
+let dealerWins = 0
+let faceDownImage = ""
+let bet = 0
+let budget = 500
+let betPlaced = false
 let deal = document.querySelector("#deal-button")
 let hit = document.querySelector("#hit-button")
 let stand = document.querySelector("#stand-button")
-// let playAgain = document.querySelector("#play-again-button")
+let playAgain = document.querySelector("#play-again-button")
 let dealer = document.querySelector("#dealer")
 let player = document.querySelector("#player")
 let message = document.querySelector("#message")
+let selectBet = document.querySelector(".drop-menu")
+let placeBet = document.querySelector("#place-a-bet")
+let budgetText = document.querySelector("#budget")
+let betText = document.querySelector("#current-bet")
 
 // create deck programmatically
 function buildDeck(deck){
-  cardNumbers.forEach(num => {
-    suits.forEach(suit => {
-      let card = {}
-      if(num > 1 && num <=10){
-        card = {number: num, suit: suit, points: num, src: `images/${num}_of_${suit}.png`}
-      }
-      else if(num == 1){
-        card = {number: num, suit: suit, points: 11, src: `images/${num}_of_${suit}.png`}
-      }
-      else{
-        card = {number: num, suit: suit, points: 10, src: `images/${num}_of_${suit}.png`}
-      }
-      deck.push(card)
+  for(i = 0; i < numberOfDecks; i++){
+    cardNumbers.forEach(num => {
+      suits.forEach(suit => {
+        let card = {}
+        if(num > 1 && num <=10){
+          card = {number: num, suit: suit, points: num, src: `images/${num}_of_${suit}.png`}
+        }
+        else if(num == 1){
+          card = {number: num, suit: suit, points: 11, src: `images/${num}_of_${suit}.png`}
+        }
+        else{
+          card = {number: num, suit: suit, points: 10, src: `images/${num}_of_${suit}.png`}
+        }
+        deck.push(card)
+      })
     })
-  })
+  }
 }
 
 function buildDeck2(deck){
@@ -58,25 +73,34 @@ function shuffleDeck(deck) {
   }
 }
 
-//create dealCardTo function which uses .pop() on the deck to deal 1 card to the player, 1 card to the dealer, then another card to the player, and a face-down card to the dealer. 
+//create dealCardTo() function which uses .pop() on the deck to deal 1 card to the player, 1 card to the dealer, then another card to the player, last face-down card is dealt to dealer using dealFaceDownCard() function
 
 function dealCardTo(person, deck){
   let card = deck.pop()
   let newCard = document.createElement("img") 
   newCard.setAttribute("class", "card1")
   newCard.setAttribute("src", `${card.src}`)
-  person.children[1].append(newCard) // appends card to person's hand
-  let points = parseInt(person.children[0].children[0].textContent) // converts "current points" to int and sets equal to points
-  points += card.points // adds card points to variable points
-  person.children[0].children[0].textContent = points.toString() // sets "current points" to string value of points
+  person.children[2].append(newCard) // appends card to person's hand
   if(person.id == "player"){
+    playerPoints += card.points // adds card playerPoints to variable points
+    player.children[1].children[0].textContent = playerPoints.toString() // sets "current points" to string value of playerPoints
     playerHand.push(card.number)
-    console.log(`playerHand = ${playerHand}`);
   }
   if(person.id == "dealer"){
+    dealerPoints += card.points // adds card dealerPoints to variable points
     dealerHand.push(card.number)
-    console.log(`dealerHand = ${dealerHand}`)
   }
+}
+
+function dealFaceDownCard(deck){
+  let card = deck.pop()
+  let newCard = document.createElement("img") 
+  newCard.setAttribute("class", "card1")
+  faceDownImage = card.src
+  newCard.setAttribute("src", "images/facedown_card.png")
+  dealer.children[2].append(newCard) // appends card to dealer's hand
+  dealerPoints += card.points // adds card dealerPoints to variable points
+  dealerHand.push(card.number)
 }
 
 function displayMessage(messageText){
@@ -84,9 +108,14 @@ function displayMessage(messageText){
 }
 
 function aceInHand(person, personHand){
-  let points = parseInt(person.children[0].children[0].textContent) // converts "current points" to int and sets equal to points
-  points -= 10 // converts ace to value of 1 point
-  person.children[0].children[0].textContent = points.toString() // sets "current points" to string value of points
+  if(person.id == "player"){
+    playerPoints -= 10
+    player.children[1].children[0].textContent = playerPoints.toString()
+  }
+  else{
+    dealerPoints -= 10
+    dealer.children[1].children[0].textContent = playerPoints.toString()
+  }
   let index = personHand.indexOf(1)
   if(index > -1){
     personHand.splice(index, 1)
@@ -96,96 +125,145 @@ function aceInHand(person, personHand){
   }
 }
 
-buildDeck(deck)
+selectBet.addEventListener("click", (e) => {
+  if(!betPlaced){
+    placeBet.textContent = `Bet \$${e.target.textContent}?`
+    bet = parseFloat(e.target.textContent)
+  }
+})
 
-shuffleDeck(deck)
-console.log(deck)
-
-buildDeck2(deck2)
-
-shuffleDeck(deck2)
-console.log(deck2)
-
-displayMessage("Click \"Deal\" to play")
+placeBet.addEventListener("click", () => {
+  if(bet != 0){  
+    budget -= bet
+    budgetText.children[0].textContent = `\$${budget.toString()}`
+    betText.children[0].textContent = `\$${bet.toString()}`
+    placeBet.textContent = "Locked In"
+    displayMessage("Click \"Deal\" to play")
+    betPlaced = true
+    placeBet.disabled = true
+  }
+})
 
 deal.addEventListener("click", () => {
-  if(dealerHand.length === 0){
-    dealCardTo(player, deck)
-    dealCardTo(dealer, deck)
-    dealCardTo(player, deck)
-    dealCardTo(dealer, deck)
-    if(dealer.children[0].children[0].textContent == "22"){
-      aceInHand(dealer, dealerHand)
+  if(bet != 0 && betPlaced){  
+    if(dealerHand.length === 0){
+      dealCardTo(player, deck)
+      dealCardTo(dealer, deck)
+      dealCardTo(player, deck)
+      dealFaceDownCard(deck)
+      if(dealerPoints == 22){
+        aceInHand(dealer, dealerHand)
+      }
+      if(playerPoints == 22){
+        aceInHand(player, playerHand)
+      }
     }
-    if(player.children[0].children[0].textContent == "22"){
-      aceInHand(player, playerHand)
-    }
-    if(dealer.children[0].children[0].textContent == "21" && player.children[0].children[0].textContent == "21"){
-      displayMessage("PUSH...you don't win and you don't lose.")
-    }
-    else if(dealer.children[0].children[0].textContent == "21"){
-      displayMessage("House wins. Please play again.")
-    }
-    else if(player.children[0].children[0].textContent == "21"){
-      displayMessage("Perfect Hand. You win!")
-    }
+  }
+  else if (placeBet){
+    alert(`Lock in your bet using the \"Bet \$${bet}?\" button `)
+  }
+  else{
+    alert("Place a bet to play")
   }
 })
 
 hit.addEventListener("click", () => {
-  if(dealerHand.length != 0){
-    if(parseInt(player.children[0].children[0].textContent) < 21){
+  if(playerPoints === 21){
+    return
+  }
+  else if(dealerHand.length != 0){
+    if(playerPoints < 21){
       dealCardTo(player, deck)
     }
-    if(parseInt(player.children[0].children[0].textContent) > 21 && playerHand.includes(1)){
+    if(playerPoints > 21 && playerHand.includes(1)){
       aceInHand(player, playerHand)
     }
-    if(parseInt(player.children[0].children[0].textContent) > 21){
-      displayMessage("Player bust. House wins.")
+    if(playerPoints > 21){
+      dealer.children[2].children[1].setAttribute("src", `${faceDownImage}`)
+      dealer.children[1].children[0].textContent = dealerPoints.toString()
+      displayMessage("House wins.")
+      dealerWins += 1
+      dealer.children[0].children[0].textContent = dealerWins.toString()
+      setTimeout(alert, 200, "Player BUST")
     }
   }
 })
 
 stand.addEventListener("click", () => {
   if(dealerHand.length != 0){
-    while (parseInt(dealer.children[0].children[0].textContent) <= 16){ // 
-      dealCardTo(dealer, deck)
-      if(parseInt(dealer.children[0].children[0].textContent) > 21 && dealerHand.includes(1)){
-        aceInHand(dealer, dealerHand)
+    dealer.children[2].children[1].setAttribute("src", `${faceDownImage}`)
+    if(dealerPoints < playerPoints){
+      while (dealerPoints <= 16){
+        dealCardTo(dealer, deck)
+        if(dealerPoints > 21 && dealerHand.includes(1)){
+          aceInHand(dealer, dealerHand)
+        }
       }
     }
-    if(parseInt(dealer.children[0].children[0].textContent) <= 21){
-      if(parseInt(dealer.children[0].children[0].textContent) > parseInt(player.children[0].children[0].textContent)){
-        displayMessage("House wins. Please play again.")
+    dealer.children[1].children[0].textContent = dealerPoints.toString()
+    if(dealerPoints <= 21){
+      if(dealerPoints > playerPoints){
+        displayMessage("House wins.")
+        setTimeout(alert, 200, "Please play again.")
+        dealerWins += 1
+        dealer.children[0].children[0].textContent = dealerWins.toString()
       }
-      else if(parseInt(dealer.children[0].children[0].textContent) === parseInt(player.children[0].children[0].textContent)){
-        displayMessage("PUSH...you don't win and you don't lose.")
+      else if(dealerPoints === playerPoints){
+        displayMessage("TIE...")
+        setTimeout(alert, 200, "You get your money back.")
+        budget += bet
+        budgetText.children[0].textContent = `\$${budget.toString()}`
       }
       else{
-        displayMessage("You win. Congratulations!!!")
+        displayMessage(`You win \$${bet*2}!`)
+        setTimeout(alert, 200, "Congratulations!")
+        budget += bet*2
+        budgetText.children[0].textContent = `\$${budget.toString()}`
+        playerWins += 1
+        player.children[0].children[0].textContent = playerWins.toString()
       }
     }
     else{
-      displayMessage("Dealer bust. You win.")
+      displayMessage(`You win \$${bet*2}!`)
+      setTimeout(alert, 200, "Dealer BUST")
+      budget += bet*2
+      budgetText.children[0].textContent = `\$${budget.toString()}`
+      playerWins += 1
+      player.children[0].children[0].textContent = playerWins.toString()
     }
   }
 })
 
 playAgain.addEventListener("click", () => {
   deck = []
-  buildDeck()
-  shuffleDeck()
+  buildDeck(deck)
+  shuffleDeck(deck)
   playerHand = []
   dealerHand = []
-  // make points = 0
-  // remove divs from dealer and player hands
+  playerPoints = 0
+  dealerPoints = 0
+  dealer.children[1].children[0].textContent = "???"
+  player.children[1].children[0].textContent = "0"
+  dealer.children[2].innerHTML = ""
+  player.children[2].innerHTML = ""
+  bet = 0
+  betPlaced = false
+  betText.children[0].textContent = `\$${bet.toString()}`
+  displayMessage("Start by placing a bet")
+  placeBet.disabled = false
+  placeBet.textContent = "Place a Bet"
 })
 
-// todo if player score goes over 21, print out "BUST!" in message area
+buildDeck(deck)
 
-// todo create function (playerStands())to deal cards to dealer after player hits stand
+shuffleDeck(deck)
+console.log(deck)
 
-// todo calculate value. If dealer or player go over 21, they lose.
+buildDeck2(edgeDeck)
 
+shuffleDeck(edgeDeck)
+console.log(edgeDeck)
 
-// todo have game logic function???
+budgetText.children[0].textContent = `\$${budget.toString()}`
+
+displayMessage("Start by placing a bet")

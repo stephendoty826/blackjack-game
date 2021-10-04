@@ -23,17 +23,29 @@
 //     array[j] = temp // array[2] = 5
 // }
 
-arr = [1, 4, 6, 7, 9, 3]
+// arr = [1, 4, 6, 7, 9, 3]
 
-let index = arr.indexOf(1)
+// let index = arr.indexOf(1)
 
-console.log(arr)
-console.log(`index = ${index}`)
+// console.log(arr)
+// console.log(`index = ${index}`)
 
-if(index > -1){
-    arr.splice(index, 1)
-}
+// if(index > -1){
+//     arr.splice(index, 1)
+// }
 
-console.log(arr);
+// console.log(arr);
+
+let test = [{dog: "yes", cat: "no", snake: "maybe"}]
+
+let test2 = [...test]
+
+console.log(test2);
+
+let test3 = test.concat(test2)
+
+console.log(test3);
+
+
 
 
