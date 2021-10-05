@@ -48,7 +48,7 @@ function buildDeck(deck){
   }
 }
 
-function buildDeck2(deck){
+function buildEdgeDeck(deck){ // function to build edgeDeck
   cardNumbers2.forEach(num => {
     suits.forEach(suit => {
       let card = {}
@@ -130,7 +130,7 @@ function resetGame(){
   buildDeck(deck)
   shuffleDeck(deck)
   console.log(deck)
-  buildDeck2(edgeDeck)
+  buildEdgeDeck(edgeDeck)
   shuffleDeck(edgeDeck)
   console.log(edgeDeck)
   playerHand = []
@@ -207,9 +207,9 @@ hit.addEventListener("click", () => {
       dealer.children[2].children[1].setAttribute("src", `${faceDownImage}`)
       dealer.children[1].children[0].textContent = dealerPoints.toString()
       displayMessage("House wins.")
+      setTimeout(alert, 200, "Player BUST")
       dealerWins += 1
       dealer.children[0].children[0].textContent = dealerWins.toString()
-      setTimeout(alert, 200, "Player BUST")
     }
   }
 })
