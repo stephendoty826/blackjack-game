@@ -91,9 +91,19 @@
     font-size: 22px;
 }
 
-#play-again-button{
-    border-radius: 25px;
+#reset-button{
+    border-radius: 50%;
     font-size: 22px;
+}
+
+@media (max-height: 720px){
+    .hand{
+        height: 24vh;
+    }
+
+    .card1{
+        height: 24vh;
+    }
 }
 
 @media (max-width: 450px) {
@@ -144,7 +154,7 @@
         font-size: 15px;
     }
     
-    #play-again-button{
+    #reset-button{
         font-size: 15px;
     }
 }

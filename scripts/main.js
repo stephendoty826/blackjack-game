@@ -18,7 +18,7 @@ let betPlaced = false
 let deal = document.querySelector("#deal-button")
 let hit = document.querySelector("#hit-button")
 let stand = document.querySelector("#stand-button")
-let playAgain = document.querySelector("#play-again-button")
+let resetButton = document.querySelector("#reset-button")
 let dealer = document.querySelector("#dealer")
 let player = document.querySelector("#player")
 let message = document.querySelector("#message")
@@ -125,6 +125,31 @@ function aceInHand(person, personHand){
   }
 }
 
+function resetGame(){
+  deck = []
+  buildDeck(deck)
+  shuffleDeck(deck)
+  console.log(deck)
+  buildDeck2(edgeDeck)
+  shuffleDeck(edgeDeck)
+  console.log(edgeDeck)
+  playerHand = []
+  dealerHand = []
+  playerPoints = 0
+  dealerPoints = 0
+  dealer.children[1].children[0].textContent = "???"
+  player.children[1].children[0].textContent = "0"
+  dealer.children[2].innerHTML = ""
+  player.children[2].innerHTML = ""
+  bet = 0
+  betPlaced = false
+  betText.children[0].textContent = `\$${bet.toString()}`
+  budgetText.children[0].textContent = `\$${budget.toString()}`
+  displayMessage("Start by placing a bet")
+  placeBet.disabled = false
+  placeBet.textContent = "Place a Bet"
+}
+
 selectBet.addEventListener("click", (e) => {
   if(!betPlaced){
     placeBet.textContent = `Bet \$${e.target.textContent}?`
@@ -147,10 +172,10 @@ placeBet.addEventListener("click", () => {
 deal.addEventListener("click", () => {
   if(bet != 0 && betPlaced){  
     if(dealerHand.length === 0){
-      dealCardTo(player, deck)
-      dealCardTo(dealer, deck)
-      dealCardTo(player, deck)
-      dealFaceDownCard(deck)
+      setTimeout(dealCardTo, 300, player, deck)
+      setTimeout(dealCardTo, 600, dealer, deck)
+      setTimeout(dealCardTo, 1100, player, deck)
+      setTimeout(dealFaceDownCard, 1400, deck)
       if(dealerPoints == 22){
         aceInHand(dealer, dealerHand)
       }
@@ -234,36 +259,8 @@ stand.addEventListener("click", () => {
   }
 })
 
-playAgain.addEventListener("click", () => {
-  deck = []
-  buildDeck(deck)
-  shuffleDeck(deck)
-  playerHand = []
-  dealerHand = []
-  playerPoints = 0
-  dealerPoints = 0
-  dealer.children[1].children[0].textContent = "???"
-  player.children[1].children[0].textContent = "0"
-  dealer.children[2].innerHTML = ""
-  player.children[2].innerHTML = ""
-  bet = 0
-  betPlaced = false
-  betText.children[0].textContent = `\$${bet.toString()}`
-  displayMessage("Start by placing a bet")
-  placeBet.disabled = false
-  placeBet.textContent = "Place a Bet"
+resetButton.addEventListener("click", () => {
+  resetGame()
 })
 
-buildDeck(deck)
-
-shuffleDeck(deck)
-console.log(deck)
-
-buildDeck2(edgeDeck)
-
-shuffleDeck(edgeDeck)
-console.log(edgeDeck)
-
-budgetText.children[0].textContent = `\$${budget.toString()}`
-
-displayMessage("Start by placing a bet")
+resetGame()
