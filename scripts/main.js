@@ -184,7 +184,7 @@ deal.addEventListener("click", () => {
       }
     }
   }
-  else if (placeBet){
+  else if (betPlaced){
     alert(`Lock in your bet using the \"Bet \$${bet}?\" button `)
   }
   else{
