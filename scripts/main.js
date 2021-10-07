@@ -145,7 +145,7 @@ function resetGame(){
   betPlaced = false
   betText.children[0].textContent = `\$${bet.toString()}`
   budgetText.children[0].textContent = `\$${budget.toString()}`
-  displayMessage("Start by placing a bet")
+  displayMessage("Place a bet to play")
   placeBet.disabled = false
   placeBet.textContent = "Place a Bet"
 }
@@ -172,10 +172,10 @@ placeBet.addEventListener("click", () => {
 deal.addEventListener("click", () => {
   if(bet != 0 && betPlaced){  
     if(dealerHand.length === 0){
-      setTimeout(dealCardTo, 300, player, deck)
-      setTimeout(dealCardTo, 600, dealer, deck)
-      setTimeout(dealCardTo, 1100, player, deck)
-      setTimeout(dealFaceDownCard, 1400, deck)
+      dealCardTo(player, deck)
+      dealCardTo(dealer, deck)
+      dealCardTo(player, deck)
+      dealFaceDownCard(deck)
       if(dealerPoints == 22){
         aceInHand(dealer, dealerHand)
       }
